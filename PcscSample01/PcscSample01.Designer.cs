@@ -34,6 +34,9 @@
             this.buttonConnect = new System.Windows.Forms.Button();
             this.groupControl = new System.Windows.Forms.GroupBox();
             this.buttonGetData = new System.Windows.Forms.Button();
+            this.buttonSelectMF = new System.Windows.Forms.Button();
+            this.buttonVerifyNum1 = new System.Windows.Forms.Button();
+            this.buttonVerifyNum2 = new System.Windows.Forms.Button();
             this.groupControl.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,6 +83,9 @@
             // 
             // groupControl
             // 
+            this.groupControl.Controls.Add(this.buttonVerifyNum2);
+            this.groupControl.Controls.Add(this.buttonVerifyNum1);
+            this.groupControl.Controls.Add(this.buttonSelectMF);
             this.groupControl.Controls.Add(this.buttonGetData);
             this.groupControl.Controls.Add(this.buttonStatus);
             this.groupControl.Location = new System.Drawing.Point(12, 67);
@@ -98,6 +104,36 @@
             this.buttonGetData.Text = "GetData";
             this.buttonGetData.UseVisualStyleBackColor = true;
             this.buttonGetData.Click += new System.EventHandler(this.buttonGetData_Click);
+            // 
+            // buttonSelectMF
+            // 
+            this.buttonSelectMF.Location = new System.Drawing.Point(6, 91);
+            this.buttonSelectMF.Name = "buttonSelectMF";
+            this.buttonSelectMF.Size = new System.Drawing.Size(75, 23);
+            this.buttonSelectMF.TabIndex = 4;
+            this.buttonSelectMF.Text = "Select MF";
+            this.buttonSelectMF.UseVisualStyleBackColor = true;
+            this.buttonSelectMF.Click += new System.EventHandler(this.buttonSelectMF_Click);
+            // 
+            // buttonVerifyNum1
+            // 
+            this.buttonVerifyNum1.Location = new System.Drawing.Point(87, 91);
+            this.buttonVerifyNum1.Name = "buttonVerifyNum1";
+            this.buttonVerifyNum1.Size = new System.Drawing.Size(86, 23);
+            this.buttonVerifyNum1.TabIndex = 5;
+            this.buttonVerifyNum1.Text = "Verify1 num";
+            this.buttonVerifyNum1.UseVisualStyleBackColor = true;
+            this.buttonVerifyNum1.Click += new System.EventHandler(this.buttonVerifyNum1_Click);
+            // 
+            // buttonVerifyNum2
+            // 
+            this.buttonVerifyNum2.Location = new System.Drawing.Point(87, 120);
+            this.buttonVerifyNum2.Name = "buttonVerifyNum2";
+            this.buttonVerifyNum2.Size = new System.Drawing.Size(86, 23);
+            this.buttonVerifyNum2.TabIndex = 6;
+            this.buttonVerifyNum2.Text = "Verify2 Num";
+            this.buttonVerifyNum2.UseVisualStyleBackColor = true;
+            this.buttonVerifyNum2.Click += new System.EventHandler(this.buttonVerifyNum2_Click);
             // 
             // PcscSample01
             // 
@@ -123,6 +159,9 @@
         private System.Windows.Forms.Button buttonConnect;
         private System.Windows.Forms.GroupBox groupControl;
         private System.Windows.Forms.Button buttonGetData;
+        private System.Windows.Forms.Button buttonSelectMF;
+        private System.Windows.Forms.Button buttonVerifyNum2;
+        private System.Windows.Forms.Button buttonVerifyNum1;
     }
 }
 
