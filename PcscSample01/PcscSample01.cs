@@ -21,13 +21,25 @@ namespace PcscSample01
         SCardReader mReader;
 
         //アプリケーション識別子
-        byte[] AID_DF1 = new byte[] { 0xa0, 0x00, 0x00, 0x02, 0x31, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-        byte[] AID_DF2 = new byte[] { 0xa0, 0x00, 0x00, 0x02, 0x31, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-        byte[] AID_DF3 = new byte[] { 0xa0, 0x00, 0x00, 0x02, 0x48, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+        byte[][] AID = new byte[][]
+        {
+            new byte[] { 0xa0, 0x00, 0x00, 0x02, 0x31, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+            new byte[] { 0xa0, 0x00, 0x00, 0x02, 0x31, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+            new byte[] { 0xa0, 0x00, 0x00, 0x02, 0x48, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
+        };
+        //byte[] AID_DF1 = new byte[] { 0xa0, 0x00, 0x00, 0x02, 0x31, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+        //byte[] AID_DF2 = new byte[] { 0xa0, 0x00, 0x00, 0x02, 0x31, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+        //byte[] AID_DF3 = new byte[] { 0xa0, 0x00, 0x00, 0x02, 0x48, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
         public PcscSample01()
         {
             InitializeComponent();
+
+            //Enabled=false
+            foreach (Control ctrl in groupControl.Controls)
+            {
+                ctrl.Enabled = false;
+            }
 
             //リソースマネージャとの接続
             mContext = new SCardContext();
@@ -36,6 +48,10 @@ namespace PcscSample01
 
             int num = updateComboRw();
             buttonConnect.Enabled = (num != 0);
+
+            //コンボボックス
+            comboDF.SelectedIndex = 0;
+            updateComboEF();
         }
 
         private void buttonRwDetect_Click(object sender, EventArgs e)
@@ -97,15 +113,37 @@ namespace PcscSample01
             displayReaderStatus(mReader);
         }
 
-
         private void buttonGetData_Click(object sender, EventArgs e)
         {
             sendGetData(mReader);
         }
 
-        private void buttonSelectMF_Click(object sender, EventArgs e)
+        private void buttonSelectFile_Click(object sender, EventArgs e)
         {
-            sendSelectFile(mReader, FileType.Dedicated, null);
+            byte[] aid = null;
+            int index;
+
+            //Dedicated
+            if (comboDF.SelectedIndex == 0)
+            {
+                //MF
+                aid = null;
+                index = 0x2f01;
+            }
+            else
+            {
+                aid = AID[comboDF.SelectedIndex - 1];
+                index = comboEF.SelectedIndex;
+            }
+            sendSelectFile(mReader, FileType.Dedicated, aid);
+
+
+            if (comboEF.SelectedIndex != 0)
+            {
+                //Elementary
+
+                sendSelectFile(mReader, index);
+            }
         }
 
         private void buttonVerifyNum1_Click(object sender, EventArgs e)
@@ -116,6 +154,22 @@ namespace PcscSample01
         private void buttonVerifyNum2_Click(object sender, EventArgs e)
         {
             sendVerifyNum(mReader, 2);
+        }
+
+        private void comboDF_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateComboEF();
+        }
+
+        private void buttonReadBinary_Click(object sender, EventArgs e)
+        {
+            if (comboEF.SelectedIndex == 0)
+            {
+                MessageBox.Show("not Select EF");
+                return;
+            }
+
+            sendReadBinary(mReader);
         }
 
         ///////////////////////////////////////////////////////////////////////////////////
@@ -136,6 +190,35 @@ namespace PcscSample01
             comboRw.SelectedIndex = 0;
 
             return readerNames.Length;
+        }
+
+        private void updateComboEF()
+        {
+            comboEF.Items.Clear();
+            comboEF.Items.Add("Dedicate");
+
+            switch (comboDF.SelectedIndex)
+            {
+                case 0: //MF
+                    comboEF.Items.Add("EF01");
+                    break;
+                case 1: //DF1
+                    comboEF.Items.Add("EF01");
+                    comboEF.Items.Add("EF02");
+                    comboEF.Items.Add("EF03");
+                    comboEF.Items.Add("EF04");
+                    comboEF.Items.Add("EF05");
+                    comboEF.Items.Add("EF06");
+                    comboEF.Items.Add("EF07");
+                    break;
+                case 2: //DF2
+                    comboEF.Items.Add("EF01");
+                    break;
+                case 3: //DF3
+                    comboEF.Items.Add("EF01");
+                    break;
+            }
+            comboEF.SelectedIndex = 0;
         }
 
         private void displayReaderStatus(ISCardReader reader)
@@ -230,6 +313,7 @@ namespace PcscSample01
         private void sendSelectFile(ISCardReader reader, FileType type, byte[] aid)
         {
             SCardError err;
+            string typeName = "";
 
             err = reader.BeginTransaction();
             if (err != SCardError.Success)
@@ -245,28 +329,35 @@ namespace PcscSample01
                     if (aid == null)
                     {
                         //MF
-                        apdu = new CommandApdu(IsoCase.Case1, reader.ActiveProtocol);
-                        apdu.P1 = 0x00;
-                        apdu.P2 = 0x00;     //MFはこれでもFCI無し
+                        apdu = new CommandApdu(IsoCase.Case1, reader.ActiveProtocol)
+                        {
+                            P1 = 0x00,
+                            P2 = 0x00       //MFはこれでもFCI無し
+                        };
+                        typeName = "Dedicated(MF)";
                     }
                     else
                     {
                         //DF
-                        apdu = new CommandApdu(IsoCase.Case3Short, reader.ActiveProtocol);
-                        apdu.P1 = 0x04;
-                        apdu.P2 = 0x0c;     //FCI無し
-                        apdu.Data = aid;
-                        apdu.Le = 0x00;
+                        apdu = new CommandApdu(IsoCase.Case3Short, reader.ActiveProtocol)
+                        {
+                            P1 = 0x04,
+                            P2 = 0x0c,      //FCI無し
+                            Data = aid,
+                        };
+                        typeName = "Dedicated(DF)";
                     }
                     break;
 
                 case FileType.Elementary:
                     //EF
-                    apdu = new CommandApdu(IsoCase.Case3Short, reader.ActiveProtocol);
-                    apdu.P1 = 0x02;
-                    apdu.P2 = 0x0c;     //FCI無し
-                    apdu.Data = aid;
-                    apdu.Le = 0x02;
+                    apdu = new CommandApdu(IsoCase.Case3Short, reader.ActiveProtocol)
+                    {
+                        P1 = 0x02,
+                        P2 = 0x0c,          //FCI無し
+                        Data = aid
+                    };
+                    typeName = "Elemantary";
                     break;
             }
             apdu.Instruction = InstructionCode.SelectFile;
@@ -285,7 +376,7 @@ namespace PcscSample01
                 MessageBox.Show(
                     "\nSW1 : " + resApdu.SW1.ToString("x2") +
                     "\nSW2 : " + resApdu.SW2.ToString("x2"),
-                    "SELECT FILE");
+                    "SELECT FILE : " + typeName);
             }
             else
             {
@@ -331,9 +422,60 @@ namespace PcscSample01
             {
                 ResponseApdu resApdu = new ResponseApdu(res, IsoCase.Case2Short, reader.ActiveProtocol);
                 MessageBox.Show(
-                    "\nSW1 : " + resApdu.SW1.ToString("x2") +
+                    "SW1 : " + resApdu.SW1.ToString("x2") +
                     "\nSW2 : " + resApdu.SW2.ToString("x2"),
                     "Verify(Num)");
+            }
+            else
+            {
+                MessageBox.Show("Fail Transmit");
+            }
+        }
+
+
+        private void sendReadBinary(ISCardReader reader)
+        {
+            SCardError err;
+            IsoCase iso_case = IsoCase.Case2Short;
+
+            err = reader.BeginTransaction();
+            if (err != SCardError.Success)
+            {
+                MessageBox.Show("Fail BeginTransaction.", "BEGIN TRANSACTION");
+                return;
+            }
+
+            CommandApdu apdu = new CommandApdu(iso_case, reader.ActiveProtocol)
+            {
+                CLA = 0x00,
+                Instruction = InstructionCode.ReadBinary,
+                //P1 = 0x80,      //相対アドレス8bit指定 + カレントEF指定
+                //P2 = 0x00
+                P1 = 0x00,      //相対アドレス15bit指定
+                P2 = 0x00
+            };
+
+            SCardPCI recvPci = new SCardPCI();      //protocol control information
+            byte[] res = new byte[880];
+            err = reader.Transmit(
+                SCardPCI.GetPci(reader.ActiveProtocol),
+                apdu.ToArray(),
+                recvPci,
+                ref res);
+            reader.EndTransaction(SCardReaderDisposition.Leave);
+
+            if (err == SCardError.Success)
+            {
+                ResponseApdu resApdu = new ResponseApdu(res, iso_case, reader.ActiveProtocol);
+                string data = "(none)";
+                if (resApdu.DataSize > 0)
+                {
+                    data = BitConverter.ToString(resApdu.GetData());
+                }
+                MessageBox.Show("result : " + data +
+                    "\nSW1 : " + resApdu.SW1.ToString("x2") +
+                    "\nSW2 : " + resApdu.SW2.ToString("x2"),
+                    "ReadBinary");
             }
             else
             {

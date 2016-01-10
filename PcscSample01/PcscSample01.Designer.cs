@@ -33,10 +33,13 @@
             this.buttonStatus = new System.Windows.Forms.Button();
             this.buttonConnect = new System.Windows.Forms.Button();
             this.groupControl = new System.Windows.Forms.GroupBox();
-            this.buttonGetData = new System.Windows.Forms.Button();
-            this.buttonSelectMF = new System.Windows.Forms.Button();
-            this.buttonVerifyNum1 = new System.Windows.Forms.Button();
+            this.comboEF = new System.Windows.Forms.ComboBox();
+            this.comboDF = new System.Windows.Forms.ComboBox();
             this.buttonVerifyNum2 = new System.Windows.Forms.Button();
+            this.buttonVerifyNum1 = new System.Windows.Forms.Button();
+            this.buttonSelectFile = new System.Windows.Forms.Button();
+            this.buttonGetData = new System.Windows.Forms.Button();
+            this.buttonReadBinary = new System.Windows.Forms.Button();
             this.groupControl.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,9 +86,12 @@
             // 
             // groupControl
             // 
+            this.groupControl.Controls.Add(this.buttonReadBinary);
+            this.groupControl.Controls.Add(this.comboEF);
+            this.groupControl.Controls.Add(this.comboDF);
             this.groupControl.Controls.Add(this.buttonVerifyNum2);
             this.groupControl.Controls.Add(this.buttonVerifyNum1);
-            this.groupControl.Controls.Add(this.buttonSelectMF);
+            this.groupControl.Controls.Add(this.buttonSelectFile);
             this.groupControl.Controls.Add(this.buttonGetData);
             this.groupControl.Controls.Add(this.buttonStatus);
             this.groupControl.Location = new System.Drawing.Point(12, 67);
@@ -95,8 +101,68 @@
             this.groupControl.TabStop = false;
             this.groupControl.Text = "Card Control";
             // 
+            // comboEF
+            // 
+            this.comboEF.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboEF.Enabled = false;
+            this.comboEF.FormattingEnabled = true;
+            this.comboEF.Location = new System.Drawing.Point(6, 95);
+            this.comboEF.Name = "comboEF";
+            this.comboEF.Size = new System.Drawing.Size(121, 20);
+            this.comboEF.TabIndex = 8;
+            // 
+            // comboDF
+            // 
+            this.comboDF.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboDF.Enabled = false;
+            this.comboDF.FormattingEnabled = true;
+            this.comboDF.Items.AddRange(new object[] {
+            "MF",
+            "DF1",
+            "DF2",
+            "DF3"});
+            this.comboDF.Location = new System.Drawing.Point(6, 67);
+            this.comboDF.Name = "comboDF";
+            this.comboDF.Size = new System.Drawing.Size(121, 20);
+            this.comboDF.TabIndex = 7;
+            this.comboDF.SelectedIndexChanged += new System.EventHandler(this.comboDF_SelectedIndexChanged);
+            // 
+            // buttonVerifyNum2
+            // 
+            this.buttonVerifyNum2.Enabled = false;
+            this.buttonVerifyNum2.Location = new System.Drawing.Point(266, 93);
+            this.buttonVerifyNum2.Name = "buttonVerifyNum2";
+            this.buttonVerifyNum2.Size = new System.Drawing.Size(86, 23);
+            this.buttonVerifyNum2.TabIndex = 6;
+            this.buttonVerifyNum2.Text = "Verify2 Num";
+            this.buttonVerifyNum2.UseVisualStyleBackColor = true;
+            this.buttonVerifyNum2.Click += new System.EventHandler(this.buttonVerifyNum2_Click);
+            // 
+            // buttonVerifyNum1
+            // 
+            this.buttonVerifyNum1.Enabled = false;
+            this.buttonVerifyNum1.Location = new System.Drawing.Point(266, 64);
+            this.buttonVerifyNum1.Name = "buttonVerifyNum1";
+            this.buttonVerifyNum1.Size = new System.Drawing.Size(86, 23);
+            this.buttonVerifyNum1.TabIndex = 5;
+            this.buttonVerifyNum1.Text = "Verify1 num";
+            this.buttonVerifyNum1.UseVisualStyleBackColor = true;
+            this.buttonVerifyNum1.Click += new System.EventHandler(this.buttonVerifyNum1_Click);
+            // 
+            // buttonSelectFile
+            // 
+            this.buttonSelectFile.Enabled = false;
+            this.buttonSelectFile.Location = new System.Drawing.Point(6, 121);
+            this.buttonSelectFile.Name = "buttonSelectFile";
+            this.buttonSelectFile.Size = new System.Drawing.Size(121, 23);
+            this.buttonSelectFile.TabIndex = 4;
+            this.buttonSelectFile.Text = "Select File";
+            this.buttonSelectFile.UseVisualStyleBackColor = true;
+            this.buttonSelectFile.Click += new System.EventHandler(this.buttonSelectFile_Click);
+            // 
             // buttonGetData
             // 
+            this.buttonGetData.Enabled = false;
             this.buttonGetData.Location = new System.Drawing.Point(87, 18);
             this.buttonGetData.Name = "buttonGetData";
             this.buttonGetData.Size = new System.Drawing.Size(75, 23);
@@ -105,35 +171,15 @@
             this.buttonGetData.UseVisualStyleBackColor = true;
             this.buttonGetData.Click += new System.EventHandler(this.buttonGetData_Click);
             // 
-            // buttonSelectMF
+            // buttonReadBinary
             // 
-            this.buttonSelectMF.Location = new System.Drawing.Point(6, 91);
-            this.buttonSelectMF.Name = "buttonSelectMF";
-            this.buttonSelectMF.Size = new System.Drawing.Size(75, 23);
-            this.buttonSelectMF.TabIndex = 4;
-            this.buttonSelectMF.Text = "Select MF";
-            this.buttonSelectMF.UseVisualStyleBackColor = true;
-            this.buttonSelectMF.Click += new System.EventHandler(this.buttonSelectMF_Click);
-            // 
-            // buttonVerifyNum1
-            // 
-            this.buttonVerifyNum1.Location = new System.Drawing.Point(87, 91);
-            this.buttonVerifyNum1.Name = "buttonVerifyNum1";
-            this.buttonVerifyNum1.Size = new System.Drawing.Size(86, 23);
-            this.buttonVerifyNum1.TabIndex = 5;
-            this.buttonVerifyNum1.Text = "Verify1 num";
-            this.buttonVerifyNum1.UseVisualStyleBackColor = true;
-            this.buttonVerifyNum1.Click += new System.EventHandler(this.buttonVerifyNum1_Click);
-            // 
-            // buttonVerifyNum2
-            // 
-            this.buttonVerifyNum2.Location = new System.Drawing.Point(87, 120);
-            this.buttonVerifyNum2.Name = "buttonVerifyNum2";
-            this.buttonVerifyNum2.Size = new System.Drawing.Size(86, 23);
-            this.buttonVerifyNum2.TabIndex = 6;
-            this.buttonVerifyNum2.Text = "Verify2 Num";
-            this.buttonVerifyNum2.UseVisualStyleBackColor = true;
-            this.buttonVerifyNum2.Click += new System.EventHandler(this.buttonVerifyNum2_Click);
+            this.buttonReadBinary.Location = new System.Drawing.Point(6, 150);
+            this.buttonReadBinary.Name = "buttonReadBinary";
+            this.buttonReadBinary.Size = new System.Drawing.Size(121, 23);
+            this.buttonReadBinary.TabIndex = 9;
+            this.buttonReadBinary.Text = "Read Binary";
+            this.buttonReadBinary.UseVisualStyleBackColor = true;
+            this.buttonReadBinary.Click += new System.EventHandler(this.buttonReadBinary_Click);
             // 
             // PcscSample01
             // 
@@ -159,9 +205,12 @@
         private System.Windows.Forms.Button buttonConnect;
         private System.Windows.Forms.GroupBox groupControl;
         private System.Windows.Forms.Button buttonGetData;
-        private System.Windows.Forms.Button buttonSelectMF;
+        private System.Windows.Forms.Button buttonSelectFile;
         private System.Windows.Forms.Button buttonVerifyNum2;
         private System.Windows.Forms.Button buttonVerifyNum1;
+        private System.Windows.Forms.ComboBox comboEF;
+        private System.Windows.Forms.ComboBox comboDF;
+        private System.Windows.Forms.Button buttonReadBinary;
     }
 }
 
